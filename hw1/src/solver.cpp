@@ -26,7 +26,25 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	AStarSearch A;
+	AStarSearch *A;
+	
+	int n, m;
+	while(file >> n >> m) {
+		// load data from file
+		string line, board;
+		for(auto i=n; i>0; i--) {
+			file >> line;
+			board.append(line);
+		}
+		// cout << board << endl;
+		A = new AStarSearch(n, m, board);
+
+		// perform search
+		A->search();
+
+
+		delete A;
+	}
 
 
 

@@ -4,7 +4,7 @@
 #include <vector>
 #include <queue>
 #include <stack>
-#include "Board.h"
+#include "AStarState.h"
 
 // 4: previous move, 4: current move, 
 // b'0001: up(^),
@@ -19,14 +19,18 @@ struct Node;
 
 class AStarSearch {
 private:
-	std::priority_queue<Node> open_list;
-	// hash closed_list;
+	AStarState* init_state;
+	AStarState* current_state;
+	std::stack<AStarState*> move_stack;
+	std::priority_queue<Node*> open_list;
+	// std::unordered_set<State> closed_list;
 	// int depth; // for IDA
 
 public:
 	AStarSearch();
+	AStarSearch(int, int, std::string);
 	~AStarSearch();
-	int heuristic();
+	void search();
 
 };
 
