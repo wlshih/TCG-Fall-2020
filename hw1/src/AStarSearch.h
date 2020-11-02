@@ -36,9 +36,12 @@ public:
 
 // size: 8+12+12=32 bits
 struct Node {
-	Direction dir;
-	unsigned int depth : 12; // how many moves
-	unsigned int cost  : 12; // current cost + heuristic
+	Direction dir;            // unsigned char
+	unsigned int depth : 12;  // how many moves
+	unsigned int cost  : 12;  // current cost + heuristic
+
+	Node() : dir(0), depth(0), cost(0) {}
+	Node(Direction D, unsigned int d, unsigned int c) : dir((dir<<4) + D), depth(d), cost(c) {}
 };
 
 
