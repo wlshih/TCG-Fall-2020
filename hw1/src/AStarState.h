@@ -4,25 +4,31 @@
 #include <string>
 #include <vector>
 
-typedef std::string Board;
+// origin input data, not the one stored on closed list
+typedef std::string BoardData;
+// encoded data stored on closed list
+typedef std::string State;
 
 class AStarState {
 private:
-	int n;  // rows
-	int m;  // cols
-	std::vector<std::vector<char>> map;
-	Board state;
+	int n;       // rows
+	int m;       // cols
+	BoardData data;  // may be unused
+	std::vector<std::vector<char> > board;
 	
 public:
-	AStarState();
-	AStarState(int, int, std::string);
+	AStarState() {}
+	AStarState(int, int, BoardData);
 	// ~AStarState();
-	void decode(Board);
-	Board encode();
-	int heuristic();
-	bool testGoal();
 
+	void loadBoard(BoardData);
 	void printBoard();
+
+	void decode(State);
+	State encode(); 
+
+	int heuristic();
+	bool isEnd();
 };
 
 

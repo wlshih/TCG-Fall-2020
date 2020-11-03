@@ -31,13 +31,13 @@ int main(int argc, char **argv) {
 	int n, m;
 	while(file >> n >> m) {
 		// load data from file
-		string line, board;
+		string line, board_data;
 		for(auto i=n; i>0; i--) {
 			file >> line;
-			board.append(line);
+			board_data.append(line);
 		}
 		// cout << board << endl;
-		A = new AStarSearch(n, m, board);
+		A = new AStarSearch(n, m, board_data);
 
 		// perform search
 		A->search();

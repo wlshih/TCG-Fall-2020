@@ -6,7 +6,7 @@ all: clean src/solver.cpp
 	rm -rf *.o
 
 clean:
-	rm -rf *.o solver || true
+	rm -rf *.o || true
 
 run: all
 	./solver testdata/tiny.in
