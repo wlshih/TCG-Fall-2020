@@ -27,7 +27,7 @@ int main(int argc, char **argv) {
 	}
 
 	AStarSearch *A;
-	
+
 	int n, m;
 	while(file >> n >> m) {
 		// load data from file

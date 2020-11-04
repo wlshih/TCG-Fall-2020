@@ -8,5 +8,8 @@ all: clean src/solver.cpp
 clean:
 	rm -rf *.o || true
 
-run: all
+tiny: all
 	./solver testdata/tiny.in
+
+nano: all
+	./solver testdata/nano.in
