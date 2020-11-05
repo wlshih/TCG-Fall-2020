@@ -121,15 +121,21 @@ bool AStarState::nextMove(Direction next) { // 1-byte unsigned char
 	int next_px = px + dx(next);
 	int next_py = py + dy(next);
 
-	if(!isValid(next_px, next_py)) return false;
+	if(!isValid(next_px, next_py)) {
+		return false;
+	}
 
 	// push items
 	char next_blk = board[next_px][next_py];
 	if((next_blk == BLK_BOX || next_blk == BLK_STAR)) {
-		if(!pushBox(next_px, next_py)) return false;
+		if(!pushBox(next_px, next_py)) {
+			return false;
+		}
 	}
 	else if(next_blk == BLK_BALL) {
-		if(!slideBall(next_px, next_py)) return false;
+		if(!slideBall(next_px, next_py)) {
+			return false;
+		}
 	}
 	// move player
 	else {
@@ -140,7 +146,8 @@ bool AStarState::nextMove(Direction next) { // 1-byte unsigned char
 	this->moves.push_back(next);
 	// cout << "depth: " << moves.size() << endl;
 
-	// StateKey is not updated!!!!
+	// update the StateKey!!!
+	this->key = encode();
 
 	return true;
 }
