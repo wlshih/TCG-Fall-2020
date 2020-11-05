@@ -14,7 +14,7 @@ struct Node {
 	unsigned int cost  : 12;  // current cost + heuristic
 
 	Node() : prevState(NULL), dir(MOV_NONE), depth(0), cost(0) {}
-	Node(State* s, Direction D) : prevState(s), dir(D), depth(0), cost(0) {}
+	Node(State* s, Direction D, unsigned int c) : prevState(s), dir(D), depth(0), cost(c) {}
 	// Node(Direction D, unsigned int c) : dir(D), cost(c) {}
 	// Node(Direction D, unsigned int d, unsigned int c) : dir(D), depth(d), cost(c) {}
 };

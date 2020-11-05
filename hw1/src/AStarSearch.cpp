@@ -12,7 +12,6 @@ AStarSearch::AStarSearch(int n, int m, BoardData data) {
 AStarSearch::~AStarSearch() {
 	delete this->init_state;
 	// delete this->current_state;
-	// clear stack and queue, release Nodes and Boards
 
 	// release closed list objects
 	for(State* s : closed_list) {
@@ -27,12 +26,17 @@ void AStarSearch::search() {
 	while(!open_list.empty()) {
 		// pop smallest node x from the open list
 		Node x = open_list.top();
-		loadCurrentState(x);
+		loadCurrentState(x); // new object
 		open_list.pop();
 
-		// test if x is an ending state
-		current_state->isEnd();
+		// current_state->printBoard();
 
+		// test if x is an ending state
+		if(current_state->isEnd()) {
+			cout << "Moves: ";
+			current_state->printMoves();
+			break;
+		}
 		// generate successors of x and add to open list
 		// and insert state on the closed list
 		genSuccessor();
@@ -40,6 +44,11 @@ void AStarSearch::search() {
 		// close this state
 		delete current_state;
 	}
+
+	// cout << "Moves: ";
+	// current_state->printBoard();
+	// current_state->printMoves();
+	cout << string(30, '.') << endl;
 
 }
 
@@ -54,7 +63,9 @@ void AStarSearch::loadCurrentState(Node x) {
 	else {
 		current_state = new AStarState(*init_state);
 		current_state->setState(*x.prevState);
+		// current_state->printBoard();
 		current_state->nextMove(x.dir);
+		// current_state->printBoard();
 		// current_state->encode();
 	}
 
@@ -71,17 +82,26 @@ void AStarSearch::genSuccessor() {
 		// 4 direction Nodes
 		if(!current_state->moves.empty() && current_state->moves.back() == reverseDir(d)) continue;
 		
-		Node y(s, d);
+		Node y(s, d, current_state->cost());
 		AStarState _state(*current_state);
-		_state.nextMove(d);
+		if(!_state.nextMove(d)) continue;
+		else _state.printBoard();
+
+		_state.printMoves();
 		// search closed list to check if the successors have been visited
-		if(closed_list.count(&_state)) continue;
+		if(closed_list.count(&_state)) {
+			continue;
+		}
 		
 		// decide to trim or not
 		// trim();
 
 		// add y to the open list
+		// add s(derived from x) to the closed list
 		open_list.push(y);
+		closed_list.insert(s);
+		// _state.printBoard();
+		// cout << endl;
 
 	}
 

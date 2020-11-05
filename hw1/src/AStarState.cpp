@@ -43,11 +43,12 @@ void AStarState::printBoard() {
 		for(auto &c : row) cout << c;
 		cout << endl;
 	}
-	usleep(500000); // delay 0.5s
+	usleep(200000); // delay 0.2s
 }
 
 void AStarState::setState(State s) {
 	this->key = s.key;
+	// this->penalty = s.penalty;
 	this->moves = s.moves;
 	this->decode();
 }
@@ -55,8 +56,32 @@ void AStarState::setState(State s) {
 State AStarState::getState() {
 	State s;
 	s.key = this->key;
+	// s.penalty = this->penalty;
 	s.moves = this->moves;
 	return s;
+}
+
+void AStarState::printMoves() {
+	// cout << "[" << moves.size() << "]";
+	for(auto &d : moves) {
+		switch(d) {
+			case MOV_UP:
+				cout << "^";
+				break;
+			case MOV_DOWN:
+				cout << "v";
+				break;
+			case MOV_LEFT:
+				cout << "<";
+				break;
+			case MOV_RIGHT:
+				cout << ">";
+				break;
+			default:
+				break;	
+		}
+	}
+	cout << endl;
 }
 
 // loadBoard() before usings
@@ -84,6 +109,10 @@ int AStarState::heuristic() {
 	return 0;
 }
 
+int AStarState::cost() {
+	return penalty + heuristic();
+}
+
 /*^^^^^^^^^^^^^^^^^^^^^^^^ state attributes ^^^^^^^^^^^^^^^^^^^^^^^*/
 /*vvvvvvvvvvvvvvvvvvvvvvvvv gameplay rules vvvvvvvvvvvvvvvvvvvvvvvv*/
 
@@ -109,6 +138,7 @@ bool AStarState::nextMove(Direction next) { // 1-byte unsigned char
 
 	// push direction to history moves
 	this->moves.push_back(next);
+	// cout << "depth: " << moves.size() << endl;
 
 	// StateKey is not updated!!!!
 
@@ -181,6 +211,8 @@ bool AStarState::pushBox(int from_x, int from_y) {
 	py = from_y;
 
 	// add penalty
+	if(starBox) penalty += 2;
+	else penalty += 1;
 
 	return true;
 }
@@ -214,13 +246,13 @@ bool AStarState::slideBall(int from_x, int from_y) {
 	py = from_y;
 
 	// add penalty (+1)
+	penalty += 1;
 
 	return true;
 }
 
 // simply move player to the given position
 void AStarState::movePlayer(int nx, int ny) {
-	printBoard();
 	if(board[nx][ny] != BLK_FLOOR) {
 		cerr << "Error: player stuck in an strange place" << endl;
 		exit(-1);
@@ -230,6 +262,8 @@ void AStarState::movePlayer(int nx, int ny) {
 
 	px = nx;
 	py = ny;
+
+	penalty += 1;
 }
 
 

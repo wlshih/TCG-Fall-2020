@@ -23,6 +23,7 @@ private:
 	int px;  // player's position
 	int py;
 	// Direction dir; // current direction, what lead to this state
+	unsigned int penalty;
 	
 public:
 	AStarState() {}
@@ -34,11 +35,13 @@ public:
 	void printBoard();
 	void setState(State);
 	State getState();
+	void printMoves();
 
 	void decode();
 	StateKey encode(); 
 
 	int heuristic();
+	int cost();
 
 	bool isEnd();
 	bool nextMove(Direction);
