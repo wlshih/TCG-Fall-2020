@@ -4,14 +4,22 @@
 
 using namespace std;
 
+// bool State::operator==(const State* const& s) const {
+// 	return (*this)->key == s->key;
+// }
+
 // load to board vector + encode to state key
+// for init_state
 AStarState::AStarState(int n, int m, BoardData data) {
 	this->n = n;
 	this->m = m;
+	this->loadBoard(data); // also set px, py
 	this->key = encode();
-	this->loadBoard(data);
+
+	// this->moves is a STL stack
 	// printBoard();
 }
+
 
 // load data to the vector, locate player position
 void AStarState::loadBoard(BoardData data) {
@@ -19,8 +27,12 @@ void AStarState::loadBoard(BoardData data) {
 
 	this->board.resize(n);
 	for(auto i=0; i<n; i++) {
-		for(auto j=0; j<m; j++) {
 		this->board[i].resize(m);
+		for(auto j=0; j<m; j++) {
+			if(data.at(i*m + j) == BLK_PLAYER) {
+				px = i;
+				py = j;
+			}
 			this->board[i][j] = data.at(i*m + j);
 		}
 	}
@@ -31,8 +43,23 @@ void AStarState::printBoard() {
 		for(auto &c : row) cout << c;
 		cout << endl;
 	}
+	usleep(500000); // delay 0.5s
 }
 
+void AStarState::setState(State s) {
+	this->key = s.key;
+	this->moves = s.moves;
+	this->decode();
+}
+
+State AStarState::getState() {
+	State s;
+	s.key = this->key;
+	s.moves = this->moves;
+	return s;
+}
+
+// loadBoard() before usings
 // encode board vector before pushing on closed list
 // store to this->key
 StateKey AStarState::encode() {
@@ -48,9 +75,9 @@ StateKey AStarState::encode() {
 }
 
 // call this everytime you use a board from closed list
-// autoload to board vector from the key stored on closed list
-void AStarState::decode(StateKey k) {
-	loadBoard(k);
+// autoload to board vector from the state key
+void AStarState::decode() {
+	loadBoard(key);
 }
 
 int AStarState::heuristic() {
@@ -69,11 +96,19 @@ bool AStarState::nextMove(Direction next) { // 1-byte unsigned char
 
 	// push items
 	char next_blk = board[next_px][next_py];
-	if((next_blk == BLK_BOX || next_blk == BLK_STAR) && !pushBox(next_px, next_py)) return false;
-	else if(next_blk == BLK_BALL && !slideBall(next_px, next_py)) return false;
-	
+	if((next_blk == BLK_BOX || next_blk == BLK_STAR)) {
+		if(!pushBox(next_px, next_py)) return false;
+	}
+	else if(next_blk == BLK_BALL) {
+		if(!slideBall(next_px, next_py)) return false;
+	}
 	// move player
-	movePlayer(next_px, next_py);
+	else {
+		movePlayer(next_px, next_py);
+	}
+
+	// push direction to history moves
+	this->moves.push_back(next);
 
 	// StateKey is not updated!!!!
 
@@ -185,6 +220,7 @@ bool AStarState::slideBall(int from_x, int from_y) {
 
 // simply move player to the given position
 void AStarState::movePlayer(int nx, int ny) {
+	printBoard();
 	if(board[nx][ny] != BLK_FLOOR) {
 		cerr << "Error: player stuck in an strange place" << endl;
 		exit(-1);
@@ -195,6 +231,7 @@ void AStarState::movePlayer(int nx, int ny) {
 	px = nx;
 	py = ny;
 }
+
 
 // browse whole board and find if there's a box
 bool AStarState::isEnd() {
