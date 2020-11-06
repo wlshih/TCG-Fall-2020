@@ -51,7 +51,7 @@ public:
 	AStarSearch();
 	AStarSearch(int, int, BoardData);
 	~AStarSearch();
-	void search();
+	bool search();
 	void loadCurrentState(Node);
 	void genSuccessor();
 	Direction reverseDir(Direction);

@@ -66,15 +66,19 @@ void AStarState::printMoves() {
 	for(auto &d : moves) {
 		switch(d) {
 			case MOV_UP:
+			case PUSH_UP:
 				cout << "^";
 				break;
 			case MOV_DOWN:
+			case PUSH_DOWN:
 				cout << "v";
 				break;
 			case MOV_LEFT:
+			case PUSH_LEFT:
 				cout << "<";
 				break;
 			case MOV_RIGHT:
+			case PUSH_RIGHT:
 				cout << ">";
 				break;
 			default:
@@ -129,11 +133,13 @@ bool AStarState::nextMove(Direction next) { // 1-byte unsigned char
 	// push items
 	char next_blk = board[next_px][next_py];
 	if((next_blk == BLK_BOX || next_blk == BLK_STAR)) {
+		next ^= MOV_MASK;
 		if(!pushBox(next_px, next_py)) {
 			return false;
 		}
 	}
 	else if(next_blk == BLK_BALL) {
+		next ^= MOV_MASK;
 		if(!slideBall(next_px, next_py)) {
 			return false;
 		}

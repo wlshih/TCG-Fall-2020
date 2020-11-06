@@ -19,7 +19,7 @@ AStarSearch::~AStarSearch() {
 	}
 }
 
-void AStarSearch::search() {
+bool AStarSearch::search() {
 	// push the Node of init_state to open list
 	Node start;
 	open_list.push(start);
@@ -35,7 +35,9 @@ void AStarSearch::search() {
 		if(current_state->isEnd()) {
 			// cout << "[Moves]: ";
 			current_state->printMoves();
-			break;
+			// printPlay();
+
+			return true;
 		}
 		// generate successors of x and add to open list
 		// and insert state on the closed list
@@ -46,7 +48,8 @@ void AStarSearch::search() {
 		// close this state
 		delete current_state;
 	}
-	// printPlay();
+
+	return false;
 
 }
 
@@ -73,6 +76,9 @@ void AStarSearch::loadCurrentState(Node x) {
 void AStarSearch::genSuccessor() {
 	State *s = new State();
 	*s = current_state->getState();
+	// cout << string(20, '.') << endl;
+	// current_state->printBoard();
+	// cout << endl;
 
 	// generate new nodes
 	// point new nodes' parent to the strings (StateKey) in the closed list
@@ -109,6 +115,7 @@ void AStarSearch::genSuccessor() {
 	}
 	// add s(derived from x) to the closed list
 	closed_list.insert(s);
+
 }
 
 Direction AStarSearch::reverseDir(Direction D) {

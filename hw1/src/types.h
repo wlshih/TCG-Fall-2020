@@ -20,12 +20,16 @@ typedef std::string BoardData;
 // b'1111: [error]
 typedef unsigned char Direction;
 
-#define MOV_UP    (unsigned char)0b0001
-#define MOV_RIGHT (unsigned char)0b0010
-#define MOV_DOWN  (unsigned char)0b0100
-#define MOV_LEFT  (unsigned char)0b1000
-#define MOV_NONE  (unsigned char)0b0000
-#define MOV_MASK  (unsigned char)0b1111
+#define MOV_UP     (unsigned char)0b0001
+#define MOV_RIGHT  (unsigned char)0b0010
+#define MOV_DOWN   (unsigned char)0b0100
+#define MOV_LEFT   (unsigned char)0b1000
+#define MOV_NONE   (unsigned char)0b0000
+#define MOV_MASK   (unsigned char)0b1111
+#define PUSH_UP    (unsigned char)0b1110
+#define PUSH_RIGHT (unsigned char)0b1101
+#define PUSH_LEFT  (unsigned char)0b1011
+#define PUSH_DOWN  (unsigned char)0b0111
 
 #define BLK_WALL   (char)35
 #define BLK_PLAYER (char)64
