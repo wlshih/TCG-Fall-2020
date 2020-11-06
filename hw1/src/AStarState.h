@@ -7,6 +7,7 @@ class State {
 public:
 	StateKey key;
 	std::vector<Direction> moves;
+	unsigned int penalty;
 public:
 	State() {}
 	// bool operator==(const State&) const;
@@ -23,7 +24,6 @@ private:
 	int px;  // player's position
 	int py;
 	// Direction dir; // current direction, what lead to this state
-	unsigned int penalty;
 	
 public:
 	AStarState() {}

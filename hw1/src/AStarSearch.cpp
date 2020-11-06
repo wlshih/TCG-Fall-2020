@@ -33,24 +33,20 @@ void AStarSearch::search() {
 
 		// test if x is an ending state
 		if(current_state->isEnd()) {
-			cout << "[Moves]: ";
+			// cout << "[Moves]: ";
 			current_state->printMoves();
 			break;
 		}
 		// generate successors of x and add to open list
 		// and insert state on the closed list
-		cout << open_list.size() << " > ";
+		// cout << open_list.size() << " > ";
 		genSuccessor();
-		cout << " > " << open_list.size() << endl;
+		// cout << " > " << open_list.size() << endl;
 
 		// close this state
 		delete current_state;
 	}
-
-	// cout << "Moves: ";
-	// current_state->printBoard();
-	// current_state->printMoves();
-	cout << string(30, '.') << endl;
+	// printPlay();
 
 }
 
@@ -83,14 +79,14 @@ void AStarSearch::genSuccessor() {
 	for(auto d = MOV_UP; d <= MOV_LEFT; d = (d<<1)) {
 		// 4 direction Nodes
 		if(!s->moves.empty() && s->moves.back() == reverseDir(d)) {
-			cout << "[BACK]";
+			// cout << "[BACK]";
 			continue;
 		}
 		
 		Node y(s, d, current_state->cost());
 		AStarState _state(*current_state);
 		if(!_state.nextMove(d)) {
-			cout << "[INVALID]";
+			// cout << "[INVALID]";
 			continue;
 		}
 		// else _state.printBoard();
@@ -98,7 +94,7 @@ void AStarSearch::genSuccessor() {
 		// _state.printMoves();
 		// search closed list to check if the successors have been visited
 		if(closed_list.count(&_state)) {
-			cout << "[REPETED]";
+			// cout << "[REPETED]";
 			continue;
 		}
 		
@@ -106,7 +102,7 @@ void AStarSearch::genSuccessor() {
 
 		// add y to the open list
 		open_list.push(y);
-		cout << "[*]";
+		// cout << "[*]";
 		// _state.printBoard();
 		// cout << endl;
 
@@ -129,5 +125,18 @@ Direction AStarSearch::reverseDir(Direction D) {
 		default:
 			cerr << "Error: why walking this way?" << endl;
 			exit(1);
+	}
+}
+
+
+// debug
+void AStarSearch::printPlay() {
+	AStarState play(*init_state);
+	play.printBoard();
+	cout << endl;
+	for(auto &d : current_state->moves) {
+		play.nextMove(d);
+		play.printBoard();
+		cout << endl;
 	}
 }

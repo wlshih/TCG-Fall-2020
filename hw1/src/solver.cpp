@@ -13,27 +13,16 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-	
-	if(argc != 2) {
-		cerr << "Usage ./solver input_file [ > output_file ]" << endl;
-		return 1;
-	}
 
-	ifstream file;
-	file.open(argv[1]);
-	if(!file.is_open()) {
-		cerr << "Error: input file " << argv[1] << " not found." << endl;
-		return 1;
-	}
 
 	AStarSearch *A;
 
 	int n, m;
-	while(file >> n >> m) {
-		// load data from file
+	while(cin >> n >> m) {
+		// read data from stdin
 		string line, board_data;
 		for(auto i=n; i>0; i--) {
-			file >> line;
+			cin >> line;
 			board_data.append(line);
 		}
 		// cout << board << endl;

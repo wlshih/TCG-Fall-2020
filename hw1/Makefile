@@ -1,15 +1,18 @@
-CXX = g++ -std=c++11 -Wall -O3
+CXX = g++ -std=c++11 -Wall -O3 -g
 
 all: clean src/solver.cpp
 	$(CXX) src/*.cpp -c
 	$(CXX) *.o -o solver
-	rm -rf *.o
 
 clean:
 	rm -rf *.o || true
 
+small: all
+	./solver < testdata/small.in
+
 tiny: all
-	./solver testdata/tiny.in
+	./solver < testdata/tiny.in
 
 nano: all
-	./solver testdata/nano.in
+	./solver < testdata/nano.in
+

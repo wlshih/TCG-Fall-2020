@@ -55,6 +55,7 @@ public:
 	void loadCurrentState(Node);
 	void genSuccessor();
 	Direction reverseDir(Direction);
+	void printPlay();
 
 };
 

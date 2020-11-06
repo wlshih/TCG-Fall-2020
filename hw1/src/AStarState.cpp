@@ -15,7 +15,7 @@ AStarState::AStarState(int n, int m, BoardData data) {
 	this->m = m;
 	this->loadBoard(data); // also set px, py
 	this->key = encode();
-
+	this->penalty = 0;///////////////////////////////////////////////////////////////////////bug
 	// this->moves is a STL stack
 	// printBoard();
 }
@@ -43,12 +43,12 @@ void AStarState::printBoard() {
 		for(auto &c : row) cout << c;
 		cout << endl;
 	}
-	usleep(200000); // delay 0.2s
+	// usleep(200000); // delay 0.2s
 }
 
 void AStarState::setState(State s) {
 	this->key = s.key;
-	// this->penalty = s.penalty;
+	this->penalty = s.penalty;
 	this->moves = s.moves;
 	this->decode();
 }
@@ -56,13 +56,13 @@ void AStarState::setState(State s) {
 State AStarState::getState() {
 	State s;
 	s.key = this->key;
-	// s.penalty = this->penalty;
+	s.penalty = this->penalty;
 	s.moves = this->moves;
 	return s;
 }
 
 void AStarState::printMoves() {
-	// cout << "[" << moves.size() << "]";
+	cout << penalty << endl;
 	for(auto &d : moves) {
 		switch(d) {
 			case MOV_UP:
@@ -83,6 +83,7 @@ void AStarState::printMoves() {
 	}
 	cout << endl;
 }
+
 
 // loadBoard() before usings
 // encode board vector before pushing on closed list
@@ -189,7 +190,7 @@ bool AStarState::isValid(int nx, int ny, char item) {
 		if(board[nx][ny] == BLK_BOX || board[nx][ny] == BLK_STAR) return false;
 	}
 	else if(item == BLK_BALL) {
-		if(board[nx][ny] == BLK_BALL) return false;
+		if(board[nx][ny] == BLK_BALL || board[nx][ny] == BLK_STAR) return false;
 	}
 
 	return true;
@@ -233,9 +234,9 @@ bool AStarState::slideBall(int from_x, int from_y) {
 	int to_x = from_x + _dx;
 	int to_y = from_y + _dy;
 	
-	if(!isValid(to_x, to_y)) return false;
+	if(!isValid(to_x, to_y, BLK_BALL)) return false;
 
-	while(board[to_x+_dx][to_y+_dy] == BLK_FLOOR) {
+	while(isValid(to_x+_dx, to_y+_dy, BLK_BALL) && board[to_x+_dx][to_y+_dy] == BLK_FLOOR) {
 		to_x += _dx;
 		to_y += _dy;
 	}
