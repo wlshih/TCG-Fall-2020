@@ -5,7 +5,7 @@ all: clean src/solver.cpp
 	$(CXX) *.o -o solver
 
 clean:
-	rm -rf *.o || true
+	rm -rf *.o solver || true
 
 small: all
 	./solver < testdata/small.in
