@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
 		A = new AStarSearch(n, m, board_data);
 		// perform search
 		if(!A->search()) {
-			cout << "0\nSolution not found :(((" << endl;
+			cout << "\nSolution not found :(((" << endl;
 		}
 
 		delete A;
