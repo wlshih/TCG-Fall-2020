@@ -6,22 +6,22 @@
 #include "AStarState.h"
 
 
-// size: 8+12+12=32 bits
+// size: 32+8+12+12=64 bits
 struct Node {
-	State* prevState;         // 4-byte pointer
-	Direction dir;            // 1-byte unsigned char
-	unsigned int depth : 12;  // how many moves (unused)
-	unsigned int cost  : 12;  // current cost + heuristic
+	State* prevState;        // 4-byte pointer
+	Direction dir;           // 1-byte unsigned char
+	unsigned int cost : 12;  // how many moves (with penalty)
+	unsigned int est  : 12;  // current cost + heuristic
 
-	Node() : prevState(NULL), dir(MOV_NONE), depth(0), cost(0) {}
-	Node(State* s, Direction D, unsigned int c) : prevState(s), dir(D), depth(0), cost(c) {}
+	Node() : prevState(NULL), dir(MOV_NONE), cost(0), est(0) {}
+	Node(State* s, Direction D, unsigned int c, unsigned int e) : prevState(s), dir(D), cost(c), est(e) {}
 	// Node(Direction D, unsigned int c) : dir(D), cost(c) {}
 	// Node(Direction D, unsigned int d, unsigned int c) : dir(D), depth(d), cost(c) {}
 };
 
 struct CompareNode {
 	bool operator()(const Node& n1, const Node& n2) {
-		return (n1.cost > n2.cost);
+		return (n1.est > n2.est);
 	}
 };
 

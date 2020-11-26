@@ -9,13 +9,13 @@ using namespace std;
 // }
 
 // load to board vector + encode to state key
-// for init_state
+// for init_state ONLY
 AStarState::AStarState(int n, int m, BoardData data) {
 	this->n = n;
 	this->m = m;
 	this->loadBoard(data); // also set px, py
 	this->key = encode();
-	this->penalty = 0;///////////////////////////////////////////////////////////////////////bug
+	this->penalty = 0; // init state penalty = 0
 	// this->moves is a STL stack
 	// printBoard();
 }
@@ -48,9 +48,9 @@ void AStarState::printBoard() {
 
 void AStarState::setState(State s) {
 	this->key = s.key;
-	this->penalty = s.penalty;
 	this->moves = s.moves;
-	this->decode();
+	this->penalty = s.penalty;
+	this->decode(); // AStarState attributes: load board, set px, py
 }
 
 State AStarState::getState() {
@@ -110,12 +110,16 @@ void AStarState::decode() {
 	loadBoard(key);
 }
 
-int AStarState::heuristic() {
+unsigned int AStarState::heuristic() {
 	return 0;
 }
 
-int AStarState::cost() {
+unsigned int AStarState::estimate() {
 	return penalty + heuristic();
+}
+
+unsigned int AStarState::cost() {
+	return penalty;
 }
 
 /*^^^^^^^^^^^^^^^^^^^^^^^^ state attributes ^^^^^^^^^^^^^^^^^^^^^^^*/

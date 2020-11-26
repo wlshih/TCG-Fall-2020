@@ -40,8 +40,9 @@ public:
 	void decode();
 	StateKey encode(); 
 
-	int heuristic();
-	int cost();
+	unsigned int heuristic();
+	unsigned int estimate();
+	unsigned int cost();
 
 	bool isEnd();
 	bool nextMove(Direction);

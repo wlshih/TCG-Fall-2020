@@ -65,7 +65,10 @@ void AStarSearch::loadCurrentState(Node x) {
 		current_state = new AStarState(*init_state);
 		current_state->setState(*x.prevState);
 		// current_state->printBoard();
-		current_state->nextMove(x.dir);
+		if(!current_state->nextMove(x.dir)) {
+			cerr << "Why you walk again??" << endl;
+			exit(-1);
+		}
 		// current_state->printBoard();
 		// current_state->encode();
 	}
@@ -74,6 +77,7 @@ void AStarSearch::loadCurrentState(Node x) {
 
 // x -> y
 void AStarSearch::genSuccessor() {
+	// s is for closed list
 	State *s = new State();
 	*s = current_state->getState();
 	// cout << string(20, '.') << endl;
@@ -88,8 +92,6 @@ void AStarSearch::genSuccessor() {
 			// cout << "[BACK]";
 			continue;
 		}
-		
-		Node y(s, d, current_state->cost());
 		AStarState _state(*current_state);
 		if(!_state.nextMove(d)) {
 			// cout << "[INVALID]";
@@ -106,6 +108,8 @@ void AStarSearch::genSuccessor() {
 		
 		// trim();
 
+		// y is for open list
+		Node y(s, d, _state.cost(), _state.estimate());
 		// add y to the open list
 		open_list.push(y);
 		// cout << "[*]";
